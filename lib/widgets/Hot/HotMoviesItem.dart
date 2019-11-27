@@ -12,6 +12,7 @@ class HotMoviesItem extends StatefulWidget {
 }
 
 class _HotMoviesItemState extends State<HotMoviesItem> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,7 +80,8 @@ class _HotMoviesItemState extends State<HotMoviesItem> {
                   textColor: Colors.red,
                   highlightedBorderColor: Colors.red,
                   borderSide: BorderSide(color: Colors.red),
-                  onPressed: () {},
+                  onPressed: () {
+                  },
                 )
               ],
             ),

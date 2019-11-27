@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_douban/data/HotMoviesData.dart';
-import 'package:flutter_douban/widgets/HotMoviesItem.dart';
+import './HotMoviesItem.dart';
 import 'package:flutter_douban/http.dart';
 
 class HotMoviesList extends StatefulWidget {
+  final String curCity;
+
+  HotMoviesList(this.curCity);
+
   @override
   _HotMoviesListState createState() => _HotMoviesListState();
 }
@@ -17,9 +21,20 @@ class _HotMoviesListState extends State<HotMoviesList> with AutomaticKeepAliveCl
     _getHotMovies();
   }
 
+  @override
+  void didUpdateWidget(HotMoviesList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.curCity != widget.curCity) {
+      setState(() {
+        hotMovies = List<HotMoviesData>();
+      });
+      _getHotMovies();
+    }
+  }
+
   void _getHotMovies() async {
     List<HotMoviesData> serverDataList = new List();
-    var res = await dio.get('https://api.douban.com/v2/movie/in_theaters?apikey=0b2bdeda43b5688921839c8ecb20399b&city=%E6%B7%B1%E5%9C%B3&start=0&count=10&client=&udid=');
+    var res = await dio.get('https://api.douban.com/v2/movie/in_theaters?apikey=0b2bdeda43b5688921839c8ecb20399b&city=${Uri.encodeComponent(widget.curCity)}&start=0&count=10&client=&udid=');
     if (res.statusCode == 200) {
       var data = res.data;
       for (var item in data['subjects']) {
