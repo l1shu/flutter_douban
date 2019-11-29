@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../widgets/Hot/Hot.dart';
 import '../widgets/Movies/Movies.dart';
 import '../widgets/Mine/Mine.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import '../redux/states.dart';
+import '../redux/reducers.dart';
+import '../redux/middlewares.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -11,6 +16,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final _widgetItems = [HotRoute(), MoviesRoute(), MineRoute()];
+  final _appStore = Store<AppState>(
+    appReducer,
+    initialState: AppState(CityState(null), HotMoviesState(null, null)),
+    middleware: [appMiddlewares],
+  );
   
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
       ),
-      body: _widgetItems[_selectedIndex]
+      body: StoreProvider<AppState>(
+        store: _appStore,
+        child: _widgetItems[_selectedIndex],
+      )
     );
   }
 
